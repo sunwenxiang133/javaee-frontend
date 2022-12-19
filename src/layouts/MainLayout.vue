@@ -1,61 +1,50 @@
 <template>
   <q-layout view="hHh lpR fFf">
-
     <q-header bordered class="bg-primary text-white" height-hint="98">
       <q-toolbar>
-        <q-btn dense flat round icon="menu" @click="toggleLeftDrawer" />
+        <q-btn dense flat round icon="bi-list" @click="toggleLeftDrawer" />
 
-        <q-toolbar-title>
-          <q-avatar>
-            <img src="https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg">
-          </q-avatar>
-          Title
-        </q-toolbar-title>
+        <q-toolbar-title> 新闻信息管理系统 </q-toolbar-title>
 
-        <q-btn dense flat round icon="menu" @click="toggleRightDrawer" />
+        <q-btn dense flat round icon="bi-list" @click="toggleRightDrawer" />
       </q-toolbar>
     </q-header>
 
     <q-drawer show-if-above v-model="leftDrawerOpen" side="left" bordered>
       <!-- drawer content -->
-      左侧窗口
+      <left-drawer />
     </q-drawer>
 
     <q-drawer show-if-above v-model="rightDrawerOpen" side="right" bordered>
       <!-- drawer content -->
-      右侧窗口
+      <right-drawer />
     </q-drawer>
 
     <q-page-container>
       <router-view />
     </q-page-container>
-
   </q-layout>
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue'
+export default {
+  name: 'MainLayout'
+}
+</script>
 
-export default defineComponent({
-  name: 'MainLayout',
+<script setup>
+import { ref } from 'vue'
+import LeftDrawer from './left-drawer'
+import RightDrawer from './right-drawer'
 
-  components: {
-  },
+const leftDrawerOpen = ref(true)
+const rightDrawerOpen = ref(false)
 
-  setup () {
-    const leftDrawerOpen = ref(true)
-    const rightDrawerOpen = ref(false)
+const toggleLeftDrawer = () => {
+  leftDrawerOpen.value = !leftDrawerOpen.value
+}
 
-    return {
-      leftDrawerOpen,
-      toggleLeftDrawer () {
-        leftDrawerOpen.value = !leftDrawerOpen.value
-      },
-      rightDrawerOpen,
-      toggleRightDrawer () {
-        rightDrawerOpen.value = !rightDrawerOpen.value
-      }
-    }
-  }
-})
+const toggleRightDrawer = () => {
+  rightDrawerOpen.value = !rightDrawerOpen.value
+}
 </script>
