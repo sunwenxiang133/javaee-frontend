@@ -1,7 +1,7 @@
-import axios from 'axios'
+import { api } from 'src/boot/axios'
 
-const sRequest = axios.create({
-  baseURL: ''
+const sRequest = api.create({
+  baseURL: '/api'
 })
 
 export default sRequest

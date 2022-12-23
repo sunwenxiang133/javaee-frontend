@@ -16,7 +16,7 @@
         >
           <q-card-section>
             <q-avatar size="88px" class="absolute-center shadow-10">
-              <img src="profile.svg" />
+              <!-- <img src="profile.svg" /> -->
             </q-avatar>
           </q-card-section>
           <q-card-section>
@@ -25,9 +25,9 @@
             </div>
           </q-card-section>
           <q-card-section>
-            <q-form class="q-gutter-md">
+            <q-form>
               <q-input
-                v-model="userInfo.username"
+                v-model="userInfo.account"
                 label="Username *"
                 lazy-rules
                 dense
@@ -48,57 +48,22 @@
               />
 
               <template v-if="isSignUp">
+                <!-- 电话 -->
                 <q-input
                   v-model="userInfo.phone"
                   label="phone"
                   lazy-rules
                   dense
+                  :rules="[val => {}]"
                 />
-                <q-input
-                  v-model="userInfo.realname"
-                  label="realname"
-                  lazy-rules
-                  dense
-                />
-                <q-input
-                  label="Location"
-                  dense
-                  v-model="userInfo.address"
-                  :loading="locationLoading"
-                >
-                  <template v-slot:append>
-                    <q-btn
-                      v-if="!locationLoading && locationSupported"
-                      @click="getLocation"
-                      round
-                      dense
-                      flat
-                      icon="bi-geo-alt"
-                    ></q-btn>
-                  </template>
-                </q-input>
-                <q-select
-                  v-model="userInfo.sex"
-                  :options="selectSex"
-                  label="Sex"
-                  dense
-                  emit-value
-                  map-options
-                />
-                <q-select
-                  v-model="userInfo.role"
-                  :options="selectMap"
-                  label="Role"
-                  dense
-                  emit-value
-                  map-options
-                />
+
                 <q-file
                   dense
-                  bottom-slots
-                  v-model="userInfo.avatar"
-                  label="User profile upload"
+                  v-model="uploadAvatar"
+                  accept="image/*"
+                  label="User Avatar"
                   counter
+                  @update:model-value="uploadAvatarMethod"
                 >
                   <template v-slot:prepend>
                     <q-icon name="cloud_upload" @click.stop.prevent />
@@ -106,30 +71,159 @@
                   <template v-slot:append>
                     <q-icon
                       name="close"
-                      @click.stop.prevent="userInfo.avatar = null"
+                      @click.stop.prevent="uploadAvatar = null"
                       class="cursor-pointer"
                     />
                   </template>
 
-                  <template v-slot:hint> Field hint </template>
+                  <!-- <template v-slot:hint> Field hint </template> -->
                 </q-file>
+
+                <!-- 角色选择 -->
+                <q-select
+                  v-model="userInfo.role"
+                  :options="selectMap"
+                  label="Role"
+                  dense
+                  emit-value
+                  map-options
+                  :rules="[val => {}]"
+                />
+
+                <template v-if="userInfo.role === '0'">
+                  <!-- 真实姓名 -->
+                  <q-input
+                    v-model="userInfo.realname"
+                    label="realname"
+                    lazy-rules
+                    dense
+                    :rules="[val => {}]"
+                  />
+
+                  <!-- 地址 -->
+                  <q-input
+                    label="Location"
+                    dense
+                    v-model="userInfo.address"
+                    :loading="locationLoading"
+                    :rules="[val => {}]"
+                  >
+                    <template v-slot:append>
+                      <q-btn
+                        v-if="!locationLoading"
+                        @click="getLocation"
+                        round
+                        dense
+                        flat
+                        icon="bi-geo-alt"
+                      ></q-btn>
+                    </template>
+                  </q-input>
+
+                  <!-- 性别选择 -->
+                  <q-select
+                    v-model="userInfo.sex"
+                    :options="selectSexMap"
+                    label="Sex"
+                    dense
+                    emit-value
+                    map-options
+                    :rules="[val => {}]"
+                  />
+                </template>
+
+                <template v-else-if="userInfo.role === '1'">
+                  <q-input
+                    v-model="userInfo.mediumName"
+                    label="mediumName"
+                    lazy-rules
+                    dense
+                    :rules="[val => {}]"
+                  />
+                  <q-input
+                    v-model="userInfo.introduce"
+                    label="introduce"
+                    lazy-rules
+                    dense
+                    :rules="[val => {}]"
+                  />
+                  <q-input
+                    v-model="userInfo.company"
+                    label="company"
+                    lazy-rules
+                    dense
+                    :rules="[val => {}]"
+                  />
+                  <q-input
+                    v-model="userInfo.microBlog"
+                    label="microBlog"
+                    lazy-rules
+                    dense
+                    :rules="[val => {}]"
+                  />
+                </template>
+
+                <template v-else>
+                  <q-input
+                    v-model="userInfo.qqNum"
+                    label="qqNum"
+                    lazy-rules
+                    dense
+                    :rules="[val => {}]"
+                  />
+                  <q-input
+                    v-model="userInfo.fansNum"
+                    label="fansNum"
+                    lazy-rules
+                    dense
+                    :rules="[val => {}]"
+                  />
+
+                  <!-- 性别选择 -->
+                  <q-select
+                    v-model="userInfo.sex"
+                    :options="selectSexMap"
+                    label="Sex"
+                    dense
+                    emit-value
+                    map-options
+                    :rules="[val => {}]"
+                  />
+
+                  <q-input
+                    v-model="userInfo.introduce"
+                    label="introduce"
+                    lazy-rules
+                    dense
+                    :rules="[val => {}]"
+                  />
+                </template>
               </template>
 
               <div class="flex justify-around">
-                <q-btn
-                  flat
-                  label="Sign up"
-                  @click="startSignUp"
-                  type="button"
-                  color="primary"
-                  v-if="!isSignUp"
-                />
-                <q-btn
-                  :label="isSignUp ? 'Sign' : 'Login'"
-                  to="/"
-                  type="button"
-                  color="primary"
-                />
+                <template v-if="!isSignUp">
+                  <q-btn
+                    flat
+                    label="Sign up"
+                    @click="startSignUp"
+                    type="button"
+                    color="primary"
+                  />
+                  <q-btn
+                    label="Login"
+                    @click="loginInfo"
+                    type="button"
+                    color="primary"
+                  />
+                </template>
+                <template v-else>
+                  <q-btn
+                    label="Sign"
+                    @click="singInfo"
+                    type="button"
+                    color="primary"
+                  />
+                </template>
               </div>
             </q-form>
           </q-card-section>
@@ -141,25 +235,142 @@
 
 <script setup>
 import { ref, reactive } from 'vue'
-import { Dialog } from 'quasar'
+import { useQuasar } from 'quasar'
+import axios from 'axios'
+import { uploadImage } from 'src/service/upload'
+import {
+  login,
+  adminRegister,
+  mediumRegister,
+  generalRegister
+} from 'src/service/login'
+import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
+import localCache from '../../utils/cache'
 
-const username = ref('admin')
-const password = ref('admin')
+import {
+  adminGetinfo,
+  meidumGetinfo,
+  generalGetinfo
+} from 'src/service/getInfo'
+
+import {
+  adminUserInfo,
+  commonUserInfo,
+  mediaUserInfo,
+  autoAssignment
+} from '../../utils/userInfoInit'
+
+const $q = useQuasar()
+const $router = useRouter()
+const $store = useStore()
 
 const userInfo = reactive({
-  username: 'admin',
+  account: 'admin',
   password: 'admin',
-  role: '用户',
+  role: '0',
   avatar: null,
   phone: '123123123',
+  // 管理员特殊字段
   realname: 'sun',
-  sex: 'man',
-  address: ''
+  sex: 0,
+  address: null,
+  // 媒体号特殊字段
+  mediumName: null,
+  introduce: null,
+  company: null,
+  microBlog: null,
+
+  // 普通用户特殊字段
+  // sex 字段 introduce 字段
+  qqNum: null,
+  fansNum: null
 })
 
-const selectSex = ref(['man', 'woman'])
+let uploadAvatar = ref()
 
-const user = ref('')
+const uploadAvatarMethod = async file => {
+  // console.log(uploadAvatar.value)
+
+  // console.log(formData.get('file'))
+
+  let res = await uploadImage(file)
+  userInfo.avatar = res.data.data.links.url
+  console.log(res)
+}
+
+const loginInfo = async () => {
+  $q.loading.show({
+    message: '正在登陆,请稍等',
+    boxClass: 'bg-grey-2 text-grey-9',
+    spinnerColor: 'primary'
+  })
+  let res = await login(userInfo)
+
+  $q.loading.hide()
+
+  // console.log(res.data.role)
+
+  // $store.state.user.role = res.data.role
+
+  // $store.state.user.userData = res.data
+  // console.log($store.state.user.role)
+
+  if (res.code === 200) {
+    $store.dispatch('user/changeRole', res.data.role)
+    $store.dispatch('user/changeUserInfo', res.data)
+    $store.dispatch('user/changeId', res.data.id)
+    localCache.setCache('role', res.data.role)
+    localCache.setCache('id', res.data.id)
+    await storageInfo(res.data.role)
+    $router.push('/')
+  } else {
+    $q.dialog({
+      title: 'Alert',
+      message: res.message
+    })
+      .onOk(() => {
+        // console.log('OK')
+      })
+      .onCancel(() => {
+        // console.log('Cancel')
+      })
+      .onDismiss(() => {
+        // console.log('I am triggered on both OK and Cancel')
+      })
+  }
+}
+
+let res, tmp
+const storageInfo = async role => {
+  switch (role) {
+    case 0:
+      userInfo.value = adminUserInfo()
+      // NOTE: 刷新会报错因为页面刷新,vuex就没了
+      res = await adminGetinfo($store.state.user.id)
+      console.log(res)
+      tmp = { ...res.data.user, ...res.data.admin }
+      // console.log(res)
+      break
+    case 1:
+      userInfo.value = commonUserInfo()
+      res = await generalGetinfo($store.state.user.id)
+      tmp = { ...res.data.user, ...res.data.common }
+      break
+    default:
+      userInfo.value = mediaUserInfo()
+      res = await meidumGetinfo($store.state.user.id)
+      tmp = { ...res.data.user, ...res.data.medium }
+      break
+  }
+  // console.log(userInfo.value)
+  console.log('tmp', tmp)
+
+  userInfo.value = autoAssignment(userInfo.value, tmp)
+  // $store.commit('user/changeUserInfo', userInfo.value)
+  // console.log(toRaw(userInfo.value))
+  localCache.setCache('userInfo', JSON.stringify(userInfo.value))
+}
 
 const isSignUp = ref(false)
 
@@ -182,6 +393,17 @@ const selectMap = [
   }
 ]
 
+const selectSexMap = [
+  {
+    label: '男',
+    value: 0
+  },
+  {
+    label: '女',
+    value: 1
+  }
+]
+
 const locationLoading = ref(false)
 
 const getLocation = () => {
@@ -189,13 +411,82 @@ const getLocation = () => {
   // NOTE: 获取当前的位置
   navigator.geolocation.getCurrentPosition(
     position => {
-      this.getCityAndCountry(position)
+      console.log('调用1')
+      getCityAndCountry(position)
     },
     err => {
-      this.locationError()
+      locationError()
+      console.log(err)
     },
     { timeout: 7000 }
   )
+}
+
+const getCityAndCountry = position => {
+  // NOTE: geocode网站提供的api,可以把生成的定位数据转成能读懂的格式
+  let apiUrl = `https://geocode.xyz/${position.coords.latitude},${position.coords.longitude}?json=1`
+  console.log('调用2', apiUrl)
+  axios
+    .get(apiUrl)
+    .then(result => {
+      locationSuccess(result)
+    })
+    .catch(err => {
+      console.log('err', err)
+    })
+}
+
+const locationError = () => {
+  $q.dialog({
+    title: 'Error',
+    message: 'Could not find your location'
+  })
+  locationLoading.value = false
+}
+
+const locationSuccess = result => {
+  userInfo.address = result.data.city
+  // NOTE: 这里要判断一波这个城市是否存在
+  if (result.data.country) {
+    userInfo.address += `${result.data.country}`
+  }
+  locationLoading.value = false
+}
+
+const singInfo = async () => {
+  $q.loading.show({
+    message: '正在注册中,请稍等',
+    boxClass: 'bg-grey-2 text-grey-9',
+    spinnerColor: 'primary'
+  })
+  let res
+  if (userInfo.role === '0') {
+    console.log(userInfo)
+    res = await adminRegister(userInfo)
+  } else if (userInfo.role === '1') {
+    res = await generalRegister(userInfo)
+  } else {
+    res = await mediumRegister(userInfo)
+  }
+  $q.loading.hide()
+
+  isSignUp.value = false
+  console.log(res)
+
+  if (res.code === 200) {
+    $q.dialog({
+      title: res.data,
+      message: res.message
+    })
+  } else if (res.code === 500) {
+    $q.dialog({
+      title: res.message
+    })
+  } else {
+    $q.dialog({
+      message: res.message
+    })
+  }
 }
 
 // const options = ref(['用户', '管理员', '媒体号'])

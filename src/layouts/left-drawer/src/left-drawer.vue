@@ -17,12 +17,15 @@
 
 <script setup>
 import { computed } from 'vue'
+import { useStore } from 'vuex'
 
-const user = '管理员'
+const $store = useStore()
+
+const user = $store.state.user.role
 
 const listItem = computed(() => {
   switch (user) {
-    case '管理员':
+    case 0:
       return [
         { name: '新闻浏览', to: '/newsBrowse', icon: 'bi-people' },
         { name: '用户管理', to: '/userManage', icon: 'bi-people' },
@@ -30,10 +33,10 @@ const listItem = computed(() => {
         { name: '个人信息', to: '/userInfo', icon: 'bi-people' }
       ]
 
-    case '媒体号':
+    case 2:
       return [
         { name: '新闻浏览', to: '/newsBrowse', icon: 'bi-people' },
-        { name: '新闻发布', to: '/userManage', icon: 'bi-people' },
+        { name: '新闻发布', to: '/newsRelease', icon: 'bi-people' },
         { name: '新闻管理', to: '/userManage', icon: 'bi-people' },
         { name: '个人信息', to: '/userInfo', icon: 'bi-people' }
       ]

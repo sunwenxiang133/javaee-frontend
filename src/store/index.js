@@ -2,6 +2,7 @@ import { store } from 'quasar/wrappers'
 import { createStore } from 'vuex'
 
 import router from './router'
+import user from './user'
 
 /*
  * If not building with SSR mode, you can
@@ -12,17 +13,16 @@ import router from './router'
  * with the Store instance.
  */
 
-class UserType{
+/* class UserType{
   ordinaryUsers='ORDINARYUSERS'
 }
-
+ */
 export default store(function (/* { ssrContext } */) {
   const Store = createStore({
-    state:{
-
-    },
+    state: {},
     modules: {
-      router
+      router,
+      user
     },
 
     // enable strict mode (adds overhead!)

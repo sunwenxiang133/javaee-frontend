@@ -47,6 +47,9 @@ module.exports = configure(function (ctx) {
     build: {
       vueRouterMode: 'hash', // available values: 'hash', 'history'
 
+      // NOTE: 使用dotenv读取环境变量所需要的配置
+      env: require('dotenv').config().parsed,
+
       // transpile: false,
       // publicPath: '/',
 
@@ -79,12 +82,25 @@ module.exports = configure(function (ctx) {
       server: {
         type: 'http'
       },
-      /* proxy: {
-        '/api': 'http://162.14.78.140:8096'
-      }, */
+      proxy: {
+        '/api': {
+          target: 'http://162.14.78.140:8086',
+          changeOrigin: true,
+          pathRewrite: {
+            '^/api': ''
+          }
+        },
+        '/lksky': {
+          target: 'https://tu.sunning.fit/api/v1',
+          changeOrigin: true,
+          pathRewrite: {
+            '^/lksky': ''
+          }
+        }
+      },
 
       // proxy: '162.14.78.140:8086',
-      // port: 8086,
+      port: 8086,
       open: true // opens browser window automatically
     },
 
@@ -103,7 +119,7 @@ module.exports = configure(function (ctx) {
       // directives: [],
 
       // Quasar plugins
-      plugins: []
+      plugins: ['Dialog', 'Loading']
     },
 
     // animations: 'all', // --- includes all animations

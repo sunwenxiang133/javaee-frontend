@@ -1,12 +1,12 @@
-import { route } from "quasar/wrappers";
+import { route } from 'quasar/wrappers'
 import {
   createRouter,
   createMemoryHistory,
   createWebHistory,
-  createWebHashHistory,
-} from "vue-router";
-import routes from "./routes";
-import localCache from "../utils/cache";
+  createWebHashHistory
+} from 'vue-router'
+import routes from './routes'
+import localCache from '../utils/cache'
 
 /*
  * If not building with SSR mode, you can
@@ -20,9 +20,9 @@ import localCache from "../utils/cache";
 export default route(function (/* { store, ssrContext } */) {
   const createHistory = process.env.SERVER
     ? createMemoryHistory
-    : process.env.VUE_ROUTER_MODE === "history"
+    : process.env.VUE_ROUTER_MODE === 'history'
     ? createWebHistory
-    : createWebHashHistory;
+    : createWebHashHistory
 
   const Router = createRouter({
     scrollBehavior: () => ({ left: 0, top: 0 }),
@@ -32,20 +32,21 @@ export default route(function (/* { store, ssrContext } */) {
     // quasar.conf.js -> build -> vueRouterMode
     // quasar.conf.js -> build -> publicPath
     history: createHistory(
-      process.env.MODE === "ssr" ? void 0 : process.env.VUE_ROUTER_BASE
-    ),
-  });
+      process.env.MODE === 'ssr' ? void 0 : process.env.VUE_ROUTER_BASE
+    )
+  })
 
   // NOTE:路由守卫
-  Router.beforeEach((to) => {
-    if (to.path !== "/login") {
-      console.log("123");
-      const token = localCache.getCache("token");
-      if (!token) {
-        return "/login";
+  Router.beforeEach(to => {
+    if (to.path !== '/login') {
+      console.log('路由守卫检测token')
+      const token = localCache.getCache('role')
+      console.log(token)
+      if (token === undefined) {
+        return '/login'
       }
     }
-  });
+  })
 
-  return Router;
-});
+  return Router
+})

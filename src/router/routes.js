@@ -2,8 +2,13 @@ const routes = [
   {
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
+    redirect: '/userInfo',
     children: [
-      { path: '', component: () => import('pages/IndexPage.vue') },
+      /* {
+        path: '',
+        component: () => import('pages/IndexPage.vue'),
+        redirect: '/'
+      }, */
       {
         // 新闻浏览
         path: '/newsBrowse',
