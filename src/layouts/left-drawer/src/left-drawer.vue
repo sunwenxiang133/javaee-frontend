@@ -18,10 +18,13 @@
 <script setup>
 import { computed } from 'vue'
 import { useStore } from 'vuex'
-
+import localCache from '../../../utils/cache'
 const $store = useStore()
+let user = $store.state.user.role
 
-const user = $store.state.user.role
+if (localCache.getCache('role')) {
+  user = localCache.getCache('role')
+}
 
 const listItem = computed(() => {
   switch (user) {

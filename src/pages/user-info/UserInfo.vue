@@ -1,5 +1,5 @@
 <template>
-  <q-page class="q-pa-sm">
+  <q-page class="q-pa-sm constrain">
     <div class="row q-col-gutter-sm">
       <div class="col-lg-8 col-md-8 col-xs-12 col-sm-12">
         <q-card class="card-bg text-white">
@@ -7,7 +7,8 @@
             <div class="text-h6">Edit Profile</div>
             <div class="text-subtitle2">Complete your profile</div>
           </q-card-section>
-          <q-card-section class="q-pa-sm">
+          <q-card-section class="q-pa-sm"
+            >quas
             <q-list class="row">
               <q-item class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <q-item-section side>
@@ -80,6 +81,7 @@
                       v-model="userInfo.sex"
                       :options="selectSexMap"
                       label="Sex"
+                      emit-value
                       dense
                       dark
                       color="white"
@@ -132,8 +134,8 @@
                       dark
                       color="white"
                       dense
-                      v-model="userInfo.fansNum"
-                      label="fansNum"
+                      v-model="userInfo.realname"
+                      label="realname"
                     />
                   </q-item-section>
                 </q-item>
@@ -143,6 +145,7 @@
                     <q-select
                       v-model="userInfo.sex"
                       :options="selectSexMap"
+                      emit-value
                       label="Sex"
                       dense
                       dark
@@ -195,6 +198,7 @@
                     <q-select
                       v-model="userInfo.microBlog"
                       :options="selectSexMap"
+                      emit-value
                       label="Sex"
                       dense
                       dark
@@ -288,18 +292,20 @@
         <q-card class="card-bg text-white">
           <q-card-section class="text-center bg-transparent">
             <q-avatar size="100px" class="shadow-10">
-              <img />
+              <img
+                fit="cover"
+                src="https://tu.sunning.fit/i/2022/12/24/63a6c3397fb45.png"
+              />
             </q-avatar>
-            <div class="text-subtitle2 q-mt-lg">by Pratik Patel</div>
-            <div class="text-h6 q-mt-md">Pratik Patel</div>
+            <div class="text-subtitle2 q-mt-lg">by 张哲小组</div>
+            <div class="text-h6 q-mt-md">Javaee 大作业</div>
           </q-card-section>
           <q-card-section>
-            <div class="text-body2 text-justify">
-              My name is Pratik Patel (also known as @pratik227). I noticed
-              myself pulling into programming since 2013, and then determined
-              myself to become a skilled and knowledgeable programmer. My
-              passion for my programming increases as I started working for
-              Incentius (where I am currently working in).
+            <div class="text-body2 text-center">
+              小组介绍:aaaaaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaa
+              aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+              aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+              bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
             </div>
           </q-card-section>
         </q-card>
@@ -323,7 +329,7 @@
                   outlined
                   color="white"
                   round
-                  v-model="password_dict.current_password"
+                  v-model="changePassword.current"
                   label="Current Password"
                 />
               </q-item-section>
@@ -340,7 +346,7 @@
                   outlined
                   color="white"
                   round
-                  v-model="password_dict.new_password"
+                  v-model="changePassword.new"
                   label="New Password"
                 />
               </q-item-section>
@@ -356,15 +362,23 @@
                   dense
                   outlined
                   round
+                  lazy-rules
                   color="white"
-                  v-model="password_dict.confirm_new_password"
+                  v-model="changePassword.confirm"
                   label="Confirm New Password"
+                  :rules="[
+                    val =>
+                      changePassword.confirm === changePassword.new ||
+                      '两次输入的密码不一致'
+                  ]"
                 />
               </q-item-section>
             </q-item>
           </q-card-section>
           <q-card-actions align="right">
-            <q-btn class="text-capitalize bg-info text-white"
+            <q-btn
+              @click="changeUserPassword"
+              class="text-capitalize bg-info text-white"
               >Change Password</q-btn
             >
           </q-card-actions>
@@ -388,7 +402,7 @@ import {
   adminUpdate,
   mediumUpdate,
   generalUpdate
-} from 'src/service/admin/admin'
+} from 'src/service/changeInfo/changeInfo'
 
 const $q = useQuasar()
 const $store = useStore()
@@ -419,8 +433,13 @@ const uploadAvatarMethod = async () => {
   }
 }
 
+const changePassword = reactive({
+  current: null,
+  new: null,
+  confirm: null
+})
+
 // const user_details = {}
-const password_dict = {}
 
 const selectSexMap = [
   {
@@ -435,6 +454,7 @@ const selectSexMap = [
 /* const userInfo=reactive({
   account
 }) */
+
 const userInfo = ref({
   account: null,
   password: null,
@@ -475,38 +495,63 @@ const getLocation = () => {
   )
 }
 
+const changeUserPassword = async () => {
+  if (changePassword.current === userInfo.value.password) {
+    await (userInfo.value.password = changePassword.new)
+    console.log(changePassword.new, userInfo.value.password)
+    changeUserInfo()
+  }
+}
+
 const changeUserInfo = async () => {
   console.log('执行到这里')
-  let tmp, res
+  let res
+  console.log(userInfo.value)
   switch ($store.state.user.role) {
     case 0:
-      tmp = toRaw(userInfo.value)
-      console.log(tmp)
-      res = await adminUpdate(
-        $store.state.user.id,
-        tmp.password,
-        tmp.avatar,
-        tmp.phone,
-        tmp.realname,
-        tmp.sex,
-        tmp.address
-      )
-      console.log(res)
+      res = await adminUpdate(userInfo.value)
+      if (res.code === 200) {
+        localCache.setCache('userInfo', JSON.stringify(userInfo.value))
+        changeSuccessDialog()
+      }
       break
     case 1:
+      res = await generalUpdate(userInfo.value)
+      if (res.code === 200) {
+        localCache.setCache('userInfo', JSON.stringify(userInfo.value))
+        changeSuccessDialog()
+      }
       break
     default:
+      res = await mediumUpdate(userInfo.value)
+      if (res.code === 200) {
+        localCache.setCache('userInfo', JSON.stringify(userInfo.value))
+        changeSuccessDialog()
+      }
       break
   }
 }
 
+const changeSuccessDialog = () => {
+  $q.dialog({
+    title: 'Success',
+    message: '修改成功'
+  })
+}
+
 const getCityAndCountry = position => {
+  console.log(position.coords.latitude)
+  let longitude = position.coords.longitude
+  let tmp = longitude.toFixed(6)
+  let latitude = position.coords.latitude
+  let tmp2 = latitude.toFixed(6)
   // NOTE: geocode网站提供的api,可以把生成的定位数据转成能读懂的格式
-  let apiUrl = `https://geocode.xyz/${position.coords.latitude},${position.coords.longitude}?json=1`
+  let apiUrl = `https://restapi.amap.com/v3/geocode/regeo?key=67bbb4598a25c4922f6c0939cb0959e7&location=${tmp},${tmp2}&poitype=商务写字楼&radius=1000&extensions=all&batch=false&roadlevel=0`
   console.log('调用2', apiUrl)
   axios
     .get(apiUrl)
     .then(result => {
+      console.log(result)
       locationSuccess(result)
     })
     .catch(err => {
@@ -522,11 +567,11 @@ const locationError = () => {
 }
 
 const locationSuccess = result => {
-  userInfo.value.address = result.data.city
+  let tmp = result.data.regeocode.addressComponent
+  console.log(tmp)
+  userInfo.value.address = tmp.province + tmp.city + tmp.district + tmp.township
+  console.log(userInfo.value.address)
   // NOTE: 这里要判断一波这个城市是否存在
-  if (result.data.country) {
-    userInfo.value.address += `${result.data.country}`
-  }
   locationLoading.value = false
 }
 
@@ -535,6 +580,10 @@ onMounted(async () => {
     userInfo.value = localCache.getCache('userInfo')
     // NOTE: vuex这里要深拷贝
     $store.commit('user/changeUserInfo', _.cloneDeep(toRaw(userInfo.value)))
+  }
+  if (localCache.getCache('role')) {
+    role.value = localCache.getCache('role')
+    $store.commit('user/changeRole', role.value)
   }
   //localCache.getCache('userInfo')
 

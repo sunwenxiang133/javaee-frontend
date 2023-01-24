@@ -134,6 +134,42 @@
 
                 <template v-else-if="userInfo.role === '1'">
                   <q-input
+                    v-model="userInfo.qqNum"
+                    label="qqNum"
+                    lazy-rules
+                    dense
+                    :rules="[val => {}]"
+                  />
+                  <q-input
+                    v-model="userInfo.realname"
+                    label="realname"
+                    lazy-rules
+                    dense
+                    :rules="[val => {}]"
+                  />
+
+                  <!-- 性别选择 -->
+                  <q-select
+                    v-model="userInfo.sex"
+                    :options="selectSexMap"
+                    label="Sex"
+                    dense
+                    emit-value
+                    map-options
+                    :rules="[val => {}]"
+                  />
+
+                  <q-input
+                    v-model="userInfo.introduce"
+                    label="introduce"
+                    lazy-rules
+                    dense
+                    :rules="[val => {}]"
+                  />
+                </template>
+
+                <template v-else>
+                  <q-input
                     v-model="userInfo.mediumName"
                     label="mediumName"
                     lazy-rules
@@ -157,42 +193,6 @@
                   <q-input
                     v-model="userInfo.microBlog"
                     label="microBlog"
-                    lazy-rules
-                    dense
-                    :rules="[val => {}]"
-                  />
-                </template>
-
-                <template v-else>
-                  <q-input
-                    v-model="userInfo.qqNum"
-                    label="qqNum"
-                    lazy-rules
-                    dense
-                    :rules="[val => {}]"
-                  />
-                  <q-input
-                    v-model="userInfo.fansNum"
-                    label="fansNum"
-                    lazy-rules
-                    dense
-                    :rules="[val => {}]"
-                  />
-
-                  <!-- 性别选择 -->
-                  <q-select
-                    v-model="userInfo.sex"
-                    :options="selectSexMap"
-                    label="Sex"
-                    dense
-                    emit-value
-                    map-options
-                    :rules="[val => {}]"
-                  />
-
-                  <q-input
-                    v-model="userInfo.introduce"
-                    label="introduce"
                     lazy-rules
                     dense
                     :rules="[val => {}]"
@@ -266,14 +266,14 @@ const $router = useRouter()
 const $store = useStore()
 
 const userInfo = reactive({
-  account: 'admin',
-  password: 'admin',
-  role: '0',
+  account: null,
+  password: null,
+  role: '1',
   avatar: null,
-  phone: '123123123',
+  phone: null,
   // 管理员特殊字段
-  realname: 'sun',
-  sex: 0,
+  realname: null,
+  sex: null,
   address: null,
   // 媒体号特殊字段
   mediumName: null,
@@ -283,8 +283,7 @@ const userInfo = reactive({
 
   // 普通用户特殊字段
   // sex 字段 introduce 字段
-  qqNum: null,
-  fansNum: null
+  qqNum: null
 })
 
 let uploadAvatar = ref()
@@ -296,7 +295,7 @@ const uploadAvatarMethod = async file => {
 
   let res = await uploadImage(file)
   userInfo.avatar = res.data.data.links.url
-  console.log(res)
+  console.log(userInfo.avatar)
 }
 
 const loginInfo = async () => {
@@ -355,7 +354,7 @@ const storageInfo = async role => {
     case 1:
       userInfo.value = commonUserInfo()
       res = await generalGetinfo($store.state.user.id)
-      tmp = { ...res.data.user, ...res.data.common }
+      tmp = { ...res.data.user, ...res.data.generalUser }
       break
     default:
       userInfo.value = mediaUserInfo()
@@ -423,8 +422,13 @@ const getLocation = () => {
 }
 
 const getCityAndCountry = position => {
+  let longitude = position.coords.longitude
+  let tmp = longitude.toFixed(6)
+  let latitude = position.coords.latitude
+  let tmp2 = latitude.toFixed(6)
   // NOTE: geocode网站提供的api,可以把生成的定位数据转成能读懂的格式
-  let apiUrl = `https://geocode.xyz/${position.coords.latitude},${position.coords.longitude}?json=1`
+  // NOTE: geocode有丫的次数限制,改成一天500次的高德接口了
+  let apiUrl = `https://restapi.amap.com/v3/geocode/regeo?key=67bbb4598a25c4922f6c0939cb0959e7&location=${tmp},${tmp2}&poitype=商务写字楼&radius=1000&extensions=all&batch=false&roadlevel=0`
   console.log('调用2', apiUrl)
   axios
     .get(apiUrl)

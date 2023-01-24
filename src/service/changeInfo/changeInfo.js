@@ -1,24 +1,23 @@
 import sRequest from '../index.js'
 import localCache from '../../utils/cache'
-let id = localCache.getItem('id')
+let idd = localCache.getCache('id')
 
-export function adminUpdate(
-  id,
+export function adminUpdate({
   password,
   avatar,
   phone,
   realname,
   sex,
   address
-) {
+}) {
   const params = {
-    id: id,
     password,
     avatar,
     phone,
     realname,
     sex,
-    address
+    address,
+    id: idd
   }
   console.log(params)
 
@@ -42,7 +41,7 @@ export function mediumUpdate({
   microBlog
 }) {
   const params = {
-    id,
+    id: idd,
     password,
     role,
     avatar,
@@ -73,7 +72,7 @@ export function generalUpdate({
   fansNum
 }) {
   const params = {
-    id,
+    id: idd,
     password,
     role,
     avatar,

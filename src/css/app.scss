@@ -1,2 +1,32 @@
 // app global css in SCSS form
 //@import './base.scss';
+
+.small-screen-only {
+  // NOTE: breakpoint-xx-max 对应断点页面的以像素为单位的最大宽度阈值
+  // NOTE: breakpoint-xx-min 对应断点页面的以像素为单位的最小宽度阈值
+  @media (max-width: $breakpoint-xs-max) {
+    display: block;
+  }
+  @media (min-width: $breakpoint-sm-min) {
+    display: none;
+  }
+}
+
+.large-screen-only {
+  @media (max-width: $breakpoint-xs-max) {
+    display: none;
+  }
+  @media (min-width: $breakpoint-sm-min) {
+    display: block;
+  }
+}
+
+.constrain {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.constrain-more {
+  max-width: 600px;
+  margin: 0 auto;
+}

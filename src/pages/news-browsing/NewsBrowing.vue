@@ -1,7 +1,13 @@
 <template>
-  <q-page> 新闻浏览 </q-page>
+  <q-page>
+    新闻浏览
+    <!-- <s-table></s-table> -->
+  </q-page>
 </template>
 
-<script setup></script>
+<script setup>
+// import '../../../node_modules/@surely-vue/table/dist/index.less'
+// import '@surely-vue/table/dist/index.less'
+</script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="less"></style>

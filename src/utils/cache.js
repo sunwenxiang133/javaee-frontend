@@ -4,6 +4,9 @@ class LocalCache {
   }
   getCache(key) {
     const value = window.localStorage.getItem(key)
+    if (key === 'id') {
+      return value
+    }
     if (value) {
       return JSON.parse(value)
     }
