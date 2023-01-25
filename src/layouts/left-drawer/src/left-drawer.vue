@@ -40,7 +40,7 @@ const listItem = computed(() => {
       return [
         { name: '新闻浏览', to: '/newsBrowse', icon: 'bi-people' },
         { name: '新闻发布', to: '/newsRelease', icon: 'bi-people' },
-        { name: '新闻管理', to: '/userManage', icon: 'bi-people' },
+        { name: '新闻管理', to: '/newsManage', icon: 'bi-people' },
         { name: '个人信息', to: '/userInfo', icon: 'bi-people' }
       ]
 

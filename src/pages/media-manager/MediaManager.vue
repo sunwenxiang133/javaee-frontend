@@ -9,18 +9,15 @@
           @selection-change="handleSelectionChange"
         >
           <el-table-column type="selection" width="55" />
-          <el-table-column label="CreateTime" width="180">
-            <template #default="scope">{{ scope.row.createtime }}</template>
+          <el-table-column label="Account" width="180">
+            <template #default="scope">{{ scope.row.account }}</template>
           </el-table-column>
-          <el-table-column label="UpdateTime" width="180">
-            <template #default="scope">{{ scope.row.updatetime }}</template>
+          <el-table-column label="Role" width="180">
+            <template #default="scope">{{ scope.row.role }}</template>
           </el-table-column>
-          <el-table-column property="title" label="Title" />
-          <!-- <el-table-column
-            property="address"
-            label="Address"
-            show-overflow-tooltip
-          /> -->
+          <el-table-column property="phone" label="Title" />
+          <el-table-column property="createtime" label="CreateTime" />
+          <el-table-column property="updatetime" label="UpdateTime" />
         </el-table>
         <div style="margin-top: 20px">
           <el-button @click="toggleSelection()">删除选中新闻</el-button>
@@ -42,16 +39,14 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { mediumMynews } from '../../service/news'
-import localCache from '../../utils/cache'
+import { adminGetMediumsExit, adminDeleteMedium } from '../../service/manager'
+// import localCache from '../../utils/cache'
 const pageSize = [2, 5, 10, 15]
 const multipleSelection = ref()
-let tmp = localCache.getCache('id')
 const pagination = ref({
   total: 10,
   pageSize: 10,
-  startPage: 1,
-  userId: tmp
+  startPage: 1
 })
 const handleSizeChange = async num => {
   console.log('Size Change', num)
@@ -69,11 +64,13 @@ const handleSelectionChange = val => {
 
 const tableData = ref()
 
-onMounted(async () => {
-  let tmp = await mediumMynews(pagination.value)
-  tableData.value = tmp
-  pagination.value.total = tmp.length
-  console.log(tmp)
+const requestInfo = async () => {
+  tableData.value = await adminGetMediumsExit(pagination.value)
+  console.log(requestInfo)
+}
+
+onMounted(() => {
+  requestInfo()
 })
 </script>
 

@@ -25,8 +25,13 @@ const routes = [
         component: () => import('pages/news-release/NewsRelease.vue')
       },
       {
-        // 用户管理
+        // 普通用户管理
         path: '/userManage',
+        component: () => import('pages/user-management/UserManagement.vue')
+      },
+      {
+        //媒体号管理
+        path: '/mediaManage',
         component: () => import('pages/user-management/UserManagement.vue')
       },
       {

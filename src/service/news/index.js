@@ -57,3 +57,18 @@ export function getNewInfo({ newsId }) {
     .then(res => res.data.data)
     .catch(res => res.data.data)
 }
+
+export function mediumMynews({ userId, startPage, pageSize }) {
+  const params = {
+    userId,
+    startPage,
+    sumPage: pageSize
+  }
+  return sRequest({
+    method: 'GET',
+    url: '/medium/mynews',
+    params
+  })
+    .then(res => res.data.data)
+    .catch(res => res.data.data)
+}

@@ -57,7 +57,7 @@ const handleCurrentChange = async num => {
 onMounted(async () => {
   let tmp = await getNewCoverList(pagination.value)
   newsInfo.value = tmp.records
-  console.log(newsInfo.value)
+  pagination.value.total = tmp.total
 })
 </script>
 

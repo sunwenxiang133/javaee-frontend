@@ -7,7 +7,7 @@
         :src="
           props.value.coverUrl
             ? props.value.coverUrl
-            : 'https://tu.sunning.fit/i/2023/01/24/63cfc4eec3d1a.png'
+            : 'https://tu.sunning.fit/i/2023/01/25/63d0a08e3ab90.png'
         "
       />
 
@@ -65,12 +65,7 @@
         <div class="text-h4">{{ props.value.title }}</div>
       </q-card-section>
 
-      <q-card-section class="q-pt-none">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum
-        repellendus sit voluptate voluptas eveniet porro. Rerum blanditiis
-        perferendis totam, ea at omnis vel numquam exercitationem aut, natus
-        minima, porro labore.
-      </q-card-section>
+      <q-card-section class="q-pt-none"> </q-card-section>
     </q-card>
   </q-dialog>
 </template>
