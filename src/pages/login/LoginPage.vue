@@ -359,6 +359,7 @@ const storageInfo = async role => {
     default:
       userInfo.value = mediaUserInfo()
       res = await meidumGetinfo($store.state.user.id)
+      console.log(res)
       tmp = { ...res.data.user, ...res.data.medium }
       break
   }

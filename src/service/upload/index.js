@@ -1,7 +1,5 @@
 import uploadRequest from './config'
 
-// TODO: 总结axois的用法,看官网的文档,params请求和data格式请求,还有这个请求和text请求
-
 // NOTE: 不能引入quasar的api然后api.create,这样实例化的是一个axois对象,而不是axois请求方法
 
 export function uploadImage(file) {

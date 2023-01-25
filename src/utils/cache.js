@@ -16,6 +16,7 @@ class LocalCache {
   }
   clearCache() {
     window.localStorage.clear()
+    return null
   }
 }
 

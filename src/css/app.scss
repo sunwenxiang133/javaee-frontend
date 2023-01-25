@@ -1,5 +1,6 @@
 // app global css in SCSS form
 //@import './base.scss';
+@import 'element-plus/dist/index.css';
 
 .small-screen-only {
   // NOTE: breakpoint-xx-max 对应断点页面的以像素为单位的最大宽度阈值

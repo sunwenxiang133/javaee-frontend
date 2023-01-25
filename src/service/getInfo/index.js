@@ -15,7 +15,7 @@ export function adminGetinfo(adminUserId) {
 
 export function meidumGetinfo(mediumId) {
   const params = {
-    mediumId
+    userId: mediumId
   }
   return sRequest({
     method: 'GET',

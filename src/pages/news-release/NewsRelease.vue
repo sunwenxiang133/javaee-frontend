@@ -101,11 +101,12 @@ import '@wangeditor/editor/dist/css/style.css' // 引入 css
 
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
 import { useRouter } from 'vue-router'
+import localCache from '../../utils/cache'
 
 const post = reactive({
-  mediumId: uid(),
+  mediumId: '',
   title: '',
-  coverUrl: null,
+  coverUrl: '',
   content: ''
 })
 
@@ -157,6 +158,7 @@ editorConfig.MENU_CONF['uploadImage'] = {
     // 自己实现上传，并得到图片 url alt href
     // 最后插入图片
     let res = await uploadImage(file)
+    console.log('上传图片')
     let url, alt, href
     if (res.data.status) {
       url = res.data.data.links.url
@@ -311,8 +313,11 @@ const disableCamera = () => {
 }
 
 const addPost = async () => {
+  post.mediumId = await localCache.getCache('id')
   post.content = valueHtml.value
   console.log(post)
+  post.coverUrl = myImageUrl.value
+
   let res = await newsAddTextNew(post)
   console.log(res)
   if (res.code === 200) {
@@ -344,6 +349,10 @@ onMounted(() => {
   const editor = editorRef.value
   if (editor == null) return
   editor.destroy()
+  if (localCache.getCache('id')) {
+    console.log('读取id成功')
+    post.mediumId = localCache.getCache('id')
+  }
 })
 onBeforeUnmount(() => {
   if (hasCameraSupport.value) {

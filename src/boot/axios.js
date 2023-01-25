@@ -9,7 +9,7 @@ import axios from 'axios'
 // for each client)
 const api = axios.create({
   // baseURL: '/api',
-  timeout: 1000
+  timeout: 10000
 })
 
 export default boot(({ app }) => {
