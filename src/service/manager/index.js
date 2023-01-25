@@ -1,9 +1,9 @@
 import sRequest from '../index.js'
 
-export function adminGetGenUserExit({ startPage, pagesum }) {
+export function adminGetGenUserExit({ startPage, pageSize }) {
   const params = {
-    startPage,
-    pagesum
+    startpage: startPage,
+    pagesum: pageSize
   }
   return sRequest({
     method: 'GET',
@@ -14,10 +14,10 @@ export function adminGetGenUserExit({ startPage, pagesum }) {
     .catch(res => res.data.data)
 }
 
-export function adminGetMediumsExit({ startPage, pagesum }) {
+export function adminGetMediumsExit({ startPage, pageSize }) {
   const params = {
-    startPage,
-    pagesum
+    startpage: startPage,
+    pagesum: pageSize
   }
   return sRequest({
     method: 'GET',
@@ -28,10 +28,10 @@ export function adminGetMediumsExit({ startPage, pagesum }) {
     .catch(res => res.data.data)
 }
 
-export function adminDeleteGenUser({ startPage, pagesum }) {
+export function adminDeleteGenUser({ startPage, pageSize }) {
   const params = {
-    startPage,
-    pagesum
+    startpage: startPage,
+    pagesum: pageSize
   }
   return sRequest({
     method: 'GET',
@@ -42,10 +42,10 @@ export function adminDeleteGenUser({ startPage, pagesum }) {
     .catch(res => res.data.data)
 }
 
-export function adminDeleteMedium({ startPage, pagesum }) {
+export function adminDeleteMedium({ startPage, pageSize }) {
   const params = {
-    startPage,
-    pagesum
+    startpage: startPage,
+    pagesum: pageSize
   }
   return sRequest({
     method: 'GET',

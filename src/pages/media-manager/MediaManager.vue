@@ -10,17 +10,21 @@
         >
           <el-table-column type="selection" width="55" />
           <el-table-column label="Account" width="180">
-            <template #default="scope">{{ scope.row.account }}</template>
+            <template #default="scope">{{ scope.row.user.account }}</template>
           </el-table-column>
           <el-table-column label="Role" width="180">
-            <template #default="scope">{{ scope.row.role }}</template>
+            <template #default="scope">{{ scope.row.user.role }}</template>
           </el-table-column>
-          <el-table-column property="phone" label="Title" />
-          <el-table-column property="createtime" label="CreateTime" />
-          <el-table-column property="updatetime" label="UpdateTime" />
+          <el-table-column property="medium.company" label="Company" />
+          <el-table-column property="medium.microBlog" label="microBlog" />
+          <el-table-column
+            property="medium.introduce"
+            label="Introduce"
+            show-overflow-tooltip
+          />
         </el-table>
         <div style="margin-top: 20px">
-          <el-button @click="toggleSelection()">删除选中新闻</el-button>
+          <el-button @click="toggleSelection()">删除选中用户</el-button>
         </div>
         <el-pagination
           style="padding: 10px 0; margin: 0 auto"
@@ -66,7 +70,7 @@ const tableData = ref()
 
 const requestInfo = async () => {
   tableData.value = await adminGetMediumsExit(pagination.value)
-  console.log(requestInfo)
+  console.log(tableData.value)
 }
 
 onMounted(() => {

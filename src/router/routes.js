@@ -32,7 +32,7 @@ const routes = [
       {
         //媒体号管理
         path: '/mediaManage',
-        component: () => import('pages/user-management/UserManagement.vue')
+        component: () => import('pages/media-manager/MediaManager.vue')
       },
       {
         path: '/userInfo',
