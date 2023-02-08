@@ -62,7 +62,19 @@
       </q-bar>
 
       <q-card-section>
-        <div class="text-h4">{{ props.value.title }}</div>
+        <div style="margin-bottom: 5px" class="text-h4">
+          {{ props.value.title }}
+        </div>
+        <q-img
+          style="max-height: 180px"
+          class="col-5"
+          :src="
+            props.value.coverUrl
+              ? props.value.coverUrl
+              : 'https://tu.sunning.fit/i/2023/01/25/63d0a08e3ab90.png'
+          "
+        />
+        <span v-html="information.message"></span>
       </q-card-section>
 
       <q-card-section class="q-pt-none"> </q-card-section>
@@ -72,7 +84,11 @@
 
 <script setup>
 import { ref } from 'vue'
+import { getNewInfo } from 'src/service/news'
 
+const information = ref({
+  message: '无内容'
+})
 const dialog = ref(false)
 const maximizedToggle = ref(true)
 
@@ -81,6 +97,14 @@ console.log(props)
 const cardClicked = async () => {
   dialog.value = true
   console.log('点击了事件', props.value.newsId)
+  getInfos(props.value.newsId)
+}
+
+const getInfos = async newsId => {
+  console.log(newsId)
+  let info = await getNewInfo({ newsId })
+  information.value.message = info.content
+  console.log(info)
 }
 </script>
 
