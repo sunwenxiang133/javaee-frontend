@@ -1,0 +1,7 @@
+{
+  "appId": "javaee.homework",
+  "appName": "javaee-frontend",
+  "bundledWebRuntime": false,
+  "npmClient": "yarn",
+  "webDir": "www"
+}

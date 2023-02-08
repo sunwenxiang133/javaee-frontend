@@ -14,6 +14,10 @@ const { configure } = require('quasar/wrappers')
 
 module.exports = configure(function (ctx) {
   return {
+    bin: {
+      windowsAndroidStudio:
+        'C:\\Users\\sunwe\\AppData\\Local\\JetBrains\\Toolbox\\apps\\AndroidStudio\\ch-0\\221.6008.13.2211.9514443\\bin\\studio64.exe'
+    },
     // https://v2.quasar.dev/quasar-cli-webpack/supporting-ts
     supportTS: false,
 

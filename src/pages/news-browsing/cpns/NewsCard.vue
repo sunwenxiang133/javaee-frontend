@@ -62,19 +62,22 @@
       </q-bar>
 
       <q-card-section>
-        <div style="margin-bottom: 5px" class="text-h4">
-          {{ props.value.title }}
+        <div style="max-width: 800px; margin: 0 auto">
+          <div style="margin-bottom: 5px" class="text-h4">
+            {{ props.value.title }}
+          </div>
+          <q-img
+            style="max-width: 450px; margin: 0 auto"
+            class="col-5"
+            :src="
+              props.value.coverUrl
+                ? props.value.coverUrl
+                : 'https://tu.sunning.fit/i/2023/01/25/63d0a08e3ab90.png'
+            "
+          />
+          <div style="height: 15px"></div>
+          <p v-html="information.message"></p>
         </div>
-        <q-img
-          style="max-height: 180px"
-          class="col-5"
-          :src="
-            props.value.coverUrl
-              ? props.value.coverUrl
-              : 'https://tu.sunning.fit/i/2023/01/25/63d0a08e3ab90.png'
-          "
-        />
-        <span v-html="information.message"></span>
       </q-card-section>
 
       <q-card-section class="q-pt-none"> </q-card-section>

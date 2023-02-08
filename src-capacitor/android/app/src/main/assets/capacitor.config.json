@@ -1,0 +1,10 @@
+{
+  "appId": "javaee.homework",
+  "appName": "javaee-frontend",
+  "bundledWebRuntime": false,
+  "npmClient": "yarn",
+  "webDir": "www",
+  "server": {
+    "url": "http://192.168.1.6:8086"
+  }
+}

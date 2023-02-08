@@ -403,6 +403,12 @@ import {
   mediumUpdate,
   generalUpdate
 } from 'src/service/changeInfo/changeInfo'
+import {
+  adminUserInfo,
+  commonUserInfo,
+  mediaUserInfo,
+  autoAssignment
+} from '../../utils/userInfoInit'
 
 const $q = useQuasar()
 const $store = useStore()
@@ -423,6 +429,7 @@ const uploadAvatarMethod = async () => {
   console.log(uploadFile.value.files)
   let res = await uploadImage(uploadFile.value.files[0])
   userInfo.value.avatar = res.data.data.links.url
+  await mediumUpdate(userInfo.value)
   console.log(res)
   console.log(res.status)
   if (res.status === 200) {
